@@ -1,0 +1,13 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# scratch / intermediate
+work/
+prototype/
+outputs/prototype-preview.html
+outputs/prototype-screenshots/
+
+# node
+node_modules/

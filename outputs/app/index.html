@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#157A40">
+<title>健身助手</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="健身助手">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- 建档 -->
+  <section class="view" id="view-onb">
+    <div style="height:calc(20px + env(safe-area-inset-top))"></div>
+    <h1 style="font-size:24px;margin:20px 0 4px">开始你的自律之旅</h1>
+    <p style="color:var(--color-text-muted);font-size:14px;margin-bottom:20px">先花 1 分钟告诉我你的情况，之后每天只需打开打卡。</p>
+    <div class="stepdots" id="stepdots"></div>
+    <div id="onb-body"></div>
+    <div style="height:12px"></div>
+    <button class="btn primary" id="onb-next">下一步</button>
+  </section>
+
+  <!-- 今日 -->
+  <section class="view" id="view-today">
+    <div class="topbar"><div class="title">健身助手</div><button class="iconbtn" id="today-weight" title="记录体重">⚖️</button></div>
+    <div id="today-body"></div>
+  </section>
+
+  <!-- 训练 -->
+  <section class="view" id="view-plan">
+    <div class="topbar"><div class="title">本周训练</div><button class="iconbtn" id="plan-regen" title="重新生成计划">↻</button></div>
+    <div class="btnrow" style="margin-bottom:12px">
+      <button class="btn secondary sm" id="plan-edit" style="flex:1">✏️ 编辑模式</button>
+      <button class="btn secondary sm" id="plan-lib" style="flex:1">📚 浏览动作库</button>
+    </div>
+    <div id="plan-body"></div>
+  </section>
+
+  <!-- 饮食 -->
+  <section class="view" id="view-diet">
+    <div class="topbar"><div class="title">本周饮食</div><span class="sub" id="diet-target"></span></div>
+    <div id="diet-body"></div>
+  </section>
+
+  <!-- 数据 -->
+  <section class="view" id="view-stats">
+    <div class="topbar"><div class="title">我的数据</div></div>
+    <div id="stats-body"></div>
+  </section>
+
+  <!-- 设置 -->
+  <section class="view" id="view-settings">
+    <div class="topbar"><div class="title">设置</div></div>
+    <div id="settings-body"></div>
+  </section>
+</div>
+
+<!-- 动作详情 -->
+<div class="overlay" id="ov-ex"><div class="sheet">
+  <div class="sheethead"><h2 id="ex-name" style="flex:1"></h2><button class="iconbtn" onclick="closeOv()">✕</button></div>
+  <div class="sub" id="ex-sub"></div>
+  <div class="gymgif" id="ex-gif"></div>
+  <div id="ex-tags" style="margin-bottom:12px"></div>
+  <h3 style="font-size:15px;margin-bottom:10px">分步教程</h3>
+  <ol class="olsteps" id="ex-steps"></ol>
+  <div style="height:10px"></div>
+  <button class="btn secondary" id="ex-add" style="display:none">＋ 添加到当前计划</button>
+</div></div>
+
+<!-- 菜谱详情 -->
+<div class="overlay" id="ov-recipe"><div class="sheet">
+  <div class="sheethead"><h2 id="rc-name" style="flex:1"></h2><button class="iconbtn" onclick="closeOv()">✕</button></div>
+  <div class="sub" id="rc-sub"></div>
+  <div class="gymgif" id="rc-gif" style="height:110px">🍳 菜品示意图</div>
+  <h3 style="font-size:15px;margin-bottom:8px">食材清单</h3>
+  <div id="rc-ing" style="margin-bottom:14px"></div>
+  <h3 style="font-size:15px;margin-bottom:10px">做法步骤</h3>
+  <ol class="olsteps" id="rc-steps"></ol>
+  <div style="height:10px"></div>
+  <button class="btn primary" id="rc-fav">收藏这道菜</button>
+</div></div>
+
+<!-- 动作库 -->
+<div class="overlay" id="ov-lib"><div class="sheet">
+  <div class="sheethead"><h2 style="flex:1">动作库</h2><button class="iconbtn" onclick="closeOv()">✕</button></div>
+  <div class="sub">共 <span id="lib-count"></span> 个动作 · 来自开源 Exercise Dataset（含中文讲解）</div>
+  <div class="searchbar">
+    <input id="lib-q" placeholder="搜索动作名 / 部位 / 器械">
+    <select class="input" id="lib-cat" style="flex:none;width:auto"><option value="">全部分类</option></select>
+  </div>
+  <div class="libgrid" id="lib-grid"></div>
+</div></div>
+
+<nav class="nav" id="nav">
+  <button data-v="today"><span>🏠</span>今日</button>
+  <button data-v="plan"><span>🏋️</span>训练</button>
+  <button data-v="diet"><span>🍽️</span>饮食</button>
+  <button data-v="stats"><span>📊</span>数据</button>
+  <button data-v="settings"><span>⚙️</span>设置</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script src="data/exercises.js"></script>
+<script src="data/zh-names.js"></script>
+<script src="data/workout-pools.js"></script>
+<script src="data/recipes.js"></script>
+<script src="js/store.js"></script>
+<script src="js/logic.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
